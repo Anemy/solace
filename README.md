@@ -1,34 +1,5 @@
-[Dune](https://anemy.github.io/dune) is a generative art project.
+[Solace](https://anemy.github.io/solace/) is a generative art project.
 
-## Installation
-
-Install node js from https://nodejs.org/en/download/
-
-```bash
-$ # Clone this repo and navigate to the cloned folder.
-$ npm install
-```
-
-## Development
-
-```bash
-$ npm start
-$ browser https://localhost:3000
-```
-
-## Donate
-
-If you like this project - show your love! ❤️
-
-It will push me to make improvements and more projects like this!
-
-Eth Wallet:
-```0x4Daa587303C6929CC5b8f3FdB6F82B177c642eEc```
-
-BTC Wallet:
-```1CfnSzzMonCUSfKGeDN2C87vX13hZEcFHJ```
-
-
-If you'd like to see something added, create an issue or make a PR! 🚀
-
-Built by [Anemy](https://github.com/Anemy)
+See Solace and Complete Solace on [Artsable](https://artsable.com):
+[Solace](https://artsable.com/Rhys/art/5d90163438eaae001f87f61a)
+[Complete Solace](https://artsable.com/Rhys/art/5d904e9038eaae001f87f61d)
