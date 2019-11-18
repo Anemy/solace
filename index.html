@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta property="og:title" content="Solace" />
+    <meta property="og:description" content="A generative art piece" />
+
+    <title>Solace</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+  </head>
+  <body style="margin: 0;padding:0;outline: none;border: none;text-align: left;cursor: pointer;">
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <script>
+      // Nice seeds 84087183
+
+      !function(a,b){var l,c=eval("this"),d=256,g="random",h=b.pow(d,6),i=b.pow(2,52),j=2*i,k=d-1;function m(r,t,e){var u=[],f=q(function n(r,t){var e,o=[],i=typeof r;if(t&&"object"==i)for(e in r)try{o.push(n(r[e],t-1))}catch(n){}return o.length?o:"string"==i?r:r+"\0"}((t=1==t?{entropy:!0}:t||{}).entropy?[r,s(a)]:null==r?function(){try{var n;return l&&(n=l.randomBytes)?n=n(d):(n=new Uint8Array(d),(c.crypto||c.msCrypto).getRandomValues(n)),s(n)}catch(n){var r=c.navigator,t=r&&r.plugins;return[+new Date,c,t,c.screen,s(a)]}}():r,3),u),p=new n(u),m=function(){for(var n=p.g(6),r=h,t=0;n<i;)n=(n+t)*d,r*=d,t=p.g(1);for(;j<=n;)n/=2,r/=2,t>>>=1;return(n+t)/r};return m.int32=function(){return 0|p.g(4)},m.quick=function(){return p.g(4)/4294967296},m.double=m,q(s(p.S),a),(t.pass||e||function(n,r,t,e){return e&&(e.S&&o(e,p),n.state=function(){return o(p,{})}),t?(b[g]=n,r):n})(m,f,"global"in t?t.global:this==b,t.state)}function n(n){var r,t=n.length,u=this,e=0,o=u.i=u.j=0,i=u.S=[];for(t||(n=[t++]);e<d;)i[e]=e++;for(e=0;e<d;e++)i[e]=i[o=k&o+n[e%t]+(r=i[e])],i[o]=r;(u.g=function(n){for(var r,t=0,e=u.i,o=u.j,i=u.S;n--;)r=i[e=k&e+1],t=t*d+i[k&(i[e]=i[o=k&o+r])+(i[o]=r)];return u.i=e,u.j=o,t})(d)}function o(n,r){return r.i=n.i,r.j=n.j,r.S=n.S.slice(),r}function q(n,r){for(var t,e=n+"",o=0;o<e.length;)r[k&o]=k&(t^=19*r[k&o])+e.charCodeAt(o++);return s(r)}function s(n){return String.fromCharCode.apply(0,n)}if(q(b.random(),a),"object"==typeof module&&module.exports){module.exports=m;try{l=require("crypto")}catch(n){}}else"function"==typeof define&&define.amd?define(function(){return m}):b["seed"+g]=m}([],Math);
+
+      Math.seedrandom('${seedString}');
+      var seed = '${seedString}';
+      var canvasWidth = window.innerWidth;
+      var canvasHeight = window.innerHeight;
+
+      var palettes = [
+        {
+          name: 'ducci_jb',
+          colors: ['#395e54', '#e77b4d', '#050006', '#e55486'],
+          stroke: '#050006',
+          background: '#efe0bc'
+        },
+        {
+          name: 'ducci_a',
+          colors: ['#809498', '#d3990e', '#000000', '#ecddc5'],
+          stroke: '#ecddc5',
+          background: '#863f52'
+        },
+        {
+          name: 'ducci_b',
+          colors: ['#ecddc5', '#79b27b', '#000000', '#ac6548'],
+          stroke: '#ac6548',
+          background: '#d5c08e'
+        },
+        {
+          name: 'ducci_d',
+          colors: ['#f3cb4d', '#f2f5e3', '#20191b', '#67875c'],
+          stroke: '#67875c',
+          background: '#433d5f'
+        },
+        {
+          name: 'ducci_e',
+          colors: ['#c37c2b', '#f6ecce', '#000000', '#386a7a'],
+          stroke: '#386a7a',
+          background: '#e3cd98'
+        },
+        {
+          name: 'ducci_f',
+          colors: ['#596f7e', '#eae6c7', '#463c21', '#f4cb4c'],
+          stroke: '#f4cb4c',
+          background: '#e67300'
+        },
+        {
+          name: 'ducci_g',
+          colors: ['#c75669', '#000000', '#11706a'],
+          stroke: '#11706a',
+          background: '#ecddc5'
+        },
+        {
+          name: 'ducci_h',
+          colors: ['#6b5c6e', '#4a2839', '#d9574a'],
+          stroke: '#d9574a',
+          background: '#ffc34b'
+        },
+        {
+          name: 'ducci_i',
+          colors: ['#e9dcad', '#143331', '#ffc000'],
+          stroke: '#ffc000',
+          background: '#a74c02'
+        },
+        {
+          name: 'ducci_j',
+          colors: ['#c47c2b', '#5f5726', '#000000', '#7e8a84'],
+          stroke: '#7e8a84',
+          background: '#ecddc5'
+        },
+        {
+          name: 'ducci_o',
+          colors: ['#c15e1f', '#e4a13a', '#000000', '#4d545a'],
+          stroke: '#4d545a',
+          background: '#dfc79b'
+        },
+        {
+          name: 'ducci_q',
+          colors: ['#4bae8c', '#d0c1a0', '#2d3538'],
+          stroke: '#2d3538',
+          background: '#d06440'
+        },
+        {
+          name: 'ducci_u',
+          colors: ['#f6d700', '#f2d692', '#000000', '#5d3552'],
+          stroke: '#5d3552',
+          background: '#ff7426'
+        },
+        {
+          name: 'ducci_v',
+          colors: ['#c65f75', '#d3990e', '#000000', '#597e7a'],
+          stroke: '#597e7a',
+          background: '#f6eccb'
+        },
+        {
+          name: 'ducci_x',
+          colors: ['#dd614a', '#f5cedb', '#1a1e4f'],
+          stroke: '#1a1e4f',
+          background: '#fbb900'
+        },
+        {
+          name: 'dt01',
+          colors: ['#172a89', '#f7f7f3'],
+          stroke: '#172a89',
+          background: '#f3abb0'
+        },
+        {
+          name: 'dt02',
+          colors: ['#302956', '#f3c507'],
+          stroke: '#302956',
+          background: '#eee3d3'
+        },
+        {
+          name: 'dt03',
+          colors: ['#000000', '#a7a7a7'],
+          stroke: '#000000',
+          background: '#0a5e78'
+        },
+        {
+          name: 'dt04',
+          colors: ['#50978e', '#f7f0df'],
+          stroke: '#000000',
+          background: '#f7f0df'
+        },
+        {
+          name: 'dt05',
+          colors: ['#ee5d65', '#f0e5cb'],
+          stroke: '#080708',
+          background: '#f0e5cb'
+        },
+        {
+          name: 'dt06',
+          colors: ['#271f47', '#e7ceb5'],
+          stroke: '#271f47',
+          background: '#cc2b1c'
+        },
+        {
+          name: 'hilda01',
+          colors: ['#ec5526', '#f4ac12', '#9ebbc1', '#f7f4e2'],
+          stroke: '#1e1b1e',
+          background: '#e7e8d4'
+        },
+        {
+          name: 'hilda02',
+          colors: ['#eb5627', '#eebb20', '#4e9eb8', '#f7f5d0'],
+          stroke: '#201d13',
+          background: '#77c1c0'
+        },
+        {
+          name: 'hilda03',
+          colors: ['#e95145', '#f8b917', '#b8bdc1', '#ffb2a2'],
+          stroke: '#010101',
+          background: '#6b7752'
+        },
+        {
+          name: 'hilda04',
+          colors: ['#e95145', '#f6bf7a', '#589da1', '#f5d9bc'],
+          stroke: '#000001',
+          background: '#f5ede1'
+        },
+        {
+          name: 'hilda05',
+          colors: ['#ff6555', '#ffb58f', '#d8eecf', '#8c4b47', '#bf7f93'],
+          stroke: '#2b0404',
+          background: '#ffda82'
+        },
+        {
+          name: 'hilda06',
+          colors: ['#f75952', '#ffce84', '#74b7b2', '#f6f6f6', '#b17d71'],
+          stroke: '#0e0603',
+          background: '#f6ecd4'
+        },
+        {
+          name: 'iiso_zeitung',
+          colors: ['#ee8067', '#f3df76', '#00a9c0', '#f7ab76'],
+          stroke: '#111a17',
+          background: '#f5efcb'
+        },
+        {
+          name: 'iiso_curcuit',
+          colors: ['#f0865c', '#f2b07b', '#6bc4d2', '#1a3643'],
+          stroke: '#0f1417',
+          background: '#f0f0e8'
+        },
+        {
+          name: 'iiso_airlines',
+          colors: ['#fe765a', '#ffb468', '#4b588f', '#faf1e0'],
+          stroke: '#1c1616',
+          background: '#fae5c8'
+        },
+        {
+          name: 'iiso_daily',
+          colors: ['#e76c4a', '#f0d967', '#7f8cb6', '#1daeb1', '#ef9640'],
+          stroke: '#000100',
+          background: '#e2ded2'
+        },
+        {
+          name: 'jud_playground',
+          colors: ['#f04924', '#fcce09', '#408ac9'],
+          stroke: '#2e2925',
+          background: '#ffffff'
+        },
+        {
+          name: 'jud_horizon',
+          colors: ['#f8c3df', '#f2e420', '#28b3d0', '#648731', '#ef6a7d'],
+          stroke: '#030305',
+          background: '#f2f0e1'
+        },
+        {
+          name: 'jud_mural',
+          colors: ['#ca3122', '#e5af16', '#4a93a2', '#0e7e39', '#e2b9bd'],
+          stroke: '#1c1616',
+          background: '#e3ded8'
+        },
+        {
+          name: 'jud_cabinet',
+          colors: ['#f0afb7', '#f6bc12', '#1477bb', '#41bb9b'],
+          stroke: '#020508',
+          background: '#e3ded8'
+        },
+        {
+          name: 'kov_01',
+          colors: ['#d24c23', '#7ba6bc', '#f0c667', '#ede2b3', '#672b35', '#142a36'],
+          stroke: '#132a37',
+          background: '#108266'
+        },
+        {
+          name: 'kov_02',
+          colors: ['#e8dccc', '#e94641', '#eeaeae'],
+          stroke: '#e8dccc',
+          background: '#6c96be'
+        },
+        {
+          name: 'kov_03',
+          colors: ['#e3937b', '#d93f1d', '#090d15', '#e6cca7'],
+          stroke: '#090d15',
+          background: '#558947'
+        },
+        {
+          name: 'kov_04',
+          colors: ['#d03718', '#292b36', '#33762f', '#ead7c9', '#ce7028', '#689d8d'],
+          stroke: '#292b36',
+          background: '#deb330'
+        },
+        {
+          name: 'kov_05',
+          colors: ['#de3f1a', '#de9232', '#007158', '#e6cdaf', '#869679'],
+          stroke: '#010006',
+          background: '#7aa5a6'
+        },
+        {
+          name: 'kov_06',
+          colors: [
+            '#a87c2a',
+            '#bdc9b1',
+            '#f14616',
+            '#ecbfaf',
+            '#017724',
+            '#0e2733',
+            '#2b9ae9'
+          ],
+          stroke: '#292319',
+          background: '#dfd4c1'
+        },
+        {
+          name: 'kov_06b',
+          colors: [
+            '#d57846',
+            '#dfe0cc',
+            '#de442f',
+            '#e7d3c5',
+            '#5ec227',
+            '#302f35',
+            '#63bdb3'
+          ],
+          stroke: '#292319',
+          background: '#dfd4c1'
+        },
+        {
+          name: 'kov_07',
+          colors: ['#c91619', '#fdecd2', '#f4a000', '#4c2653'],
+          stroke: '#111',
+          background: '#89c2cd'
+        },
+        {
+          name: 'olympia',
+          colors: ['#ff3250', '#ffb33a', '#008c36', '#0085c6', '#4c4c4c'],
+          stroke: '#0b0b0b',
+          background: '#faf2e5'
+        },
+        {
+          name: 'byrnes',
+          colors: ['#c54514', '#dca215', '#23507f'],
+          stroke: '#0b0b0b',
+          background: '#e8e7d4'
+        },
+        {
+          name: 'verena',
+          colors: ['#f1594a', '#f5b50e', '#14a160', '#2969de', '#885fa4'],
+          stroke: '#1a1a1a',
+          background: '#e2e6e8'
+        },
+        {
+          name: 'empusa',
+          colors: [
+            '#c92a28',
+            '#e69301',
+            '#1f8793',
+            '#13652b',
+            '#e7d8b0',
+            '#48233b',
+            '#e3b3ac'
+          ],
+          stroke: '#1a1a1a',
+          background: '#f0f0f2'
+        },
+        {
+          name: 'florida_citrus',
+          colors: ['#ea7251', '#ebf7f0', '#02aca5'],
+          stroke: '#050100',
+          background: '#9ae2d3'
+        },
+        {
+          name: 'lemon_citrus',
+          colors: ['#e2d574', '#f1f4f7', '#69c5ab'],
+          stroke: '#463231',
+          background: '#f79eac'
+        },
+        {
+          name: 'yuma_punk',
+          colors: ['#f05e3b', '#ebdec4', '#ffdb00'],
+          stroke: '#ebdec4',
+          background: '#161616'
+        },
+        {
+          name: 'moir',
+          colors: ['#a49f4f', '#d4501e', '#f7c558', '#ebbaa6'],
+          stroke: '#161716',
+          background: '#f7f4ef'
+        },
+        {
+          name: 'tokyo',
+          colors: ['#d13821', '#1d295b', '#51587d', '#e7e7e7'],
+          stroke: '#0b0e3e',
+          background: '#c7b09e'
+        },
+        {
+          name: 'bauhaus01',
+          colors: ['#ea542f', '#f19c1b', '#4f8ba9'],
+          stroke: '#221e1f',
+          background: '#e7dbc4'
+        },
+        {
+          name: 'bauhaus02',
+          colors: ['#bb2f2a', '#e9b500', '#0165b7'],
+          stroke: '#000000',
+          background: '#e5d6b8'
+        },
+        {
+          name: 'rohlfs_1R',
+          colors: ['#004996', '#567bae', '#ff4c48', '#ffbcb3'],
+          stroke: '#004996',
+          background: '#fff8e7'
+        },
+        {
+          name: 'rohlfs_1Y',
+          colors: ['#004996', '#567bae', '#ffc000', '#ffdca4'],
+          stroke: '#004996',
+          background: '#fff8e7'
+        },
+        {
+          name: 'rohlfs_1G',
+          colors: ['#004996', '#567bae', '#60bf3c', '#d2deb1'],
+          stroke: '#004996',
+          background: '#fff8e7'
+        },
+        {
+          name: 'rohlfs_2',
+          colors: ['#4d3d9a', '#f76975', '#ffffff', '#eff0dd'],
+          stroke: '#211029',
+          background: '#58bdbc'
+        },
+        {
+          name: 'rohlfs_3',
+          colors: ['#abdfdf', '#fde500', '#58bdbc', '#eff0dd'],
+          stroke: '#211029',
+          background: '#f76975'
+        },
+        {
+          name: 'rohlfs_4',
+          colors: ['#fde500', '#2f2043', '#f76975', '#eff0dd'],
+          stroke: '#211029',
+          background: '#fbbeca'
+        },
+        {
+          name: 'tsu_arcade',
+          colors: ['#4aad8b', '#e15147', '#f3b551', '#cec8b8', '#d1af84', '#544e47'],
+          stroke: '#251c12',
+          background: '#cfc7b9'
+        },
+        {
+          name: 'tsu_harutan',
+          colors: ['#75974a', '#c83e3c', '#f39140', '#e4ded2', '#f8c5a4', '#434f55'],
+          stroke: '#251c12',
+          background: '#cfc7b9'
+        },
+        {
+          name: 'tsu_akasaka',
+          colors: ['#687f72', '#cc7d6c', '#dec36f', '#dec7af', '#ad8470', '#424637'],
+          stroke: '#251c12',
+          background: '#cfc7b9'
+        }, {
+          name: 'white n black',
+          colors: ['#FFFFFF'],
+          stroke: '#FFFFFF',
+          background: '#000011'
+        },
+        {
+          name: 'black n white',
+          colors: ['#000011'],
+          stroke: '#000011',
+          background: '#FFFFFF'
+        }
+      ];
+
+      var hoodDetailsSet = false;
+      var flowAmount;
+      var connectorsAmountMultiplier;
+      function drawHood(width, height, pallete, thinStrokeWidth, thiccStrokeWidth, rays, angleFromSun) {
+        var minLines = 50;
+        var maxLines = 300;
+
+        var minFlow = canvasWidth / 30; // width / 4;
+        var maxFlow = canvasWidth;// width * 3;
+        
+        var paddingX = maxFlow;
+        
+        // var noiseScale = 0.006;
+        var noiseScale = 0.007;
+        
+        var noiseOffsetX = Math.random() * 2000;
+        var noiseOffsetY = Math.random() * 2000;
+        
+        if (!hoodDetailsSet) {
+          hoodDetailsSet = true;
+          flowAmount = minFlow + (Math.random() * Math.random() * (maxFlow - minFlow));
+        }
+
+        var connectors = Math.floor(5 + (rays / 100) + (connectorsAmountMultiplier * 1.5 * (rays / 8) * (width / 400)));
+
+        // var connectors = minLines + Math.floor(Math.random() * (maxLines - minLines));
+        var radius = Math.min(width, height) / 4;
+        var x = (width / 2) + (radius * (Math.cos(Math.PI * 2 * (i / connectors))));
+        var y = (height / 2) + (radius * (Math.sin(Math.PI * 2 * (i / connectors))));
+        
+        var xMove = flowAmount * Math.cos(angleFromSun);
+        var yMove = flowAmount * Math.sin(angleFromSun);
+        // if (Math.random() > 0.98) {
+        //   yMove += Math.random() * 5 * Math.sin(angleFromSun);
+        // }
+        // console.log('angleFromSun', (angleFromSun * (180 / Math.PI)));
+        // var trueFlow = Math.max(width / 10, flowAmount / 3)
+        // var xFall = trueFlow * Math.cos(angleFromSun);
+        // var yMove = trueFlow * Math.sin(angleFromSun);
+        // if (Math.random() > 0.98) {
+        //   yMove += Math.random() * 5 * Math.sin(angleFromSun);
+        // }
+        
+        stroke(pallete.stroke);
+        
+        var thiccFlag = true;
+        
+        for (var i = 0; i < connectors; i++) {
+          var theColor = 2 * Math.floor(255 * (i / connectors));
+          if (thiccFlag) {
+            thiccFlag = false;
+            strokeWeight(thinStrokeWidth / 2);
+          } else {
+            thiccFlag = true;
+            strokeWeight(thiccStrokeWidth / 2);
+          }
+          if (i >= connectors / 2) {
+            // theColor = 125;
+            theColor = 255 - (theColor - 255);
+          }
+          var x = (width / 2) + (radius * (Math.cos(Math.PI * 2 * (i / connectors))));
+          var y = (height / 2) + (radius * (Math.sin(Math.PI * 2 * (i / connectors))));
+          
+          var cy1Base = y;
+          var c1Intensity = flowAmount * noise((x + noiseOffsetX) * noiseScale, (cy1Base + noiseOffsetY) * noiseScale, 1 * noiseScale);
+          var c1Dir = (2 * Math.PI * noise(((x + noiseOffsetX) + (width * 2)) * noiseScale, ((cy1Base + noiseOffsetY) + (height * 2)) * noiseScale, 1 * noiseScale));
+          var xPush = (Math.cos(c1Dir) * (c1Intensity * 0.2));
+          var cx1 = x + (xMove * (1 / 3));
+          var yPush = (Math.sin(c1Dir) * (c1Intensity * 0.2));
+          var cy1 = cy1Base + (yMove * (1 / 3));
+          
+          var c2Intensity = flowAmount * noise((cx1 + noiseOffsetX) * noiseScale, (cy1 + noiseOffsetY) * noiseScale, 1 * noiseScale);
+          var c2Dir = (2 * Math.PI * noise(((cx1 + noiseOffsetX) + (width * 2)) * noiseScale, ((cy1 + noiseOffsetY) + (height * 2)) * noiseScale, 1 * noiseScale));
+          var c2XPush = (Math.cos(c2Dir) * (c2Intensity * 0.2));
+          var cx2 = cx1 + c2XPush + (xMove / 3);
+          var c2YPush = (Math.sin(c2Dir) * (c2Intensity * 0.2));
+          var cy2 = cy1 + c2YPush + (yMove / 3);
+          
+          var finalIntensity = flowAmount * noise((cx2 + noiseOffsetX) * noiseScale, (cy2 + noiseOffsetY) * noiseScale, 1 * noiseScale);
+          var finalDir = (2 * Math.PI * noise(((cx2 + noiseOffsetX) + (width * 2)) * noiseScale, ((cy2 + noiseOffsetY) + (height * 2)) * noiseScale, 1 * noiseScale));
+          var xFinalPush = (Math.cos(finalDir) * (finalIntensity * 0.2));
+          var finalX = cx2 + xFinalPush + (xMove / 3);
+          var yFinalPush = (Math.sin(finalDir) * (finalIntensity * 0.2));
+          var finalY = cy2 + yFinalPush + (yMove / 3);
+          
+          // var finalX = cx1 + (cx1 > width / 2 ? -xFall : xFall);
+          // if (finalX > width / 2 && cx1 < width / 2) {
+          //   finalX = width / 2;
+          // } else if (finalX < width / 2 && cx1 > width / 2) {
+          //   finalX = width / 2;
+          // }
+          // var finalX = x + xFall;
+          // var finalY = y + yMove;
+          // if (x < width / 2) {
+          //   var xPush = ((width / 2) - x) * Math.cos(angleFromSun);
+          //   cx1 = cx1 + (xPush * 0.8);
+            
+          //   // var yPush = -verticalAmplifier * (height / 4) * Math.sin(angleFromSun);
+          //   // finalY = cy1;// + yPush;
+          //   // cy1 = cy1 + (yPush * 0.7);
+          // }
+
+          bezier(x, y, cx1, cy1, cx2, cy2, finalX, finalY);
+        }
+      }
+
+      function getAngleBetweenTwoPoints(x1, y1, x2, y2) {
+        var dx = x2 - x1;
+        // Minus to correct for coord re-mapping
+        var dy = -(y2 - y1);
+
+        var angle = Math.atan2(dy, dx);
+
+        // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
+        if (angle < 0) {
+          angle = Math.abs(angle);
+        } else {
+          angle = 2 * Math.PI - angle;
+        }
+        angle = 2 * Math.PI - angle;
+
+        return angle;
+      }
+
+      var MIN_SOOT_COUNT = 50;
+      var MAX_SOOT_COUNT = 300;
+
+      var alwaysWhiteSoot = Math.random() > 0.9;
+
+      function drawSoot(x, y, width, height, scale) {
+        // var SOOT_COLOR = color(10, 10, 20);
+        var SOOT_COLOR = color(255, 255, 255, 190);
+        
+        if (!alwaysWhiteSoot && Math.random() > 0.4) {
+          SOOT_COLOR = color(10, 10, 20);
+        }
+        
+        var MIN_SOOT_SIZE = (width / 2000) * scale;
+        var MAX_SOOT_SIZE = (width / 300) * scale;
+        
+        var amountOfSoot = Math.floor(MIN_SOOT_COUNT + (Math.random() * (MAX_SOOT_COUNT - MIN_SOOT_COUNT)));
+        
+        for (var i = 0; i < amountOfSoot; i++) {
+          var SOOT_SIZE = MIN_SOOT_SIZE + (Math.random() * (MAX_SOOT_SIZE - MIN_SOOT_SIZE));
+          
+          noStroke();
+          fill(SOOT_COLOR);
+          var xPos = x + Math.floor(SOOT_SIZE + (Math.random() * (width - SOOT_SIZE)));
+          var yPos = y + Math.floor(SOOT_SIZE + (Math.random() * (height - SOOT_SIZE)));
+          ellipse(xPos, yPos, SOOT_SIZE, SOOT_SIZE);
+        }
+      }
+
+      function setup() {
+        createCanvas(canvasWidth, canvasHeight);
+
+        solace();
+      }
+
+      function mouseClicked() {
+        solace();
+      }
+
+      function solace() {
+        var width = canvasWidth;
+        var height = canvasHeight;
+
+        noFill();
+        strokeWeight(1);
+        
+        var pallete = palettes[Math.floor(Math.random() * palettes.length)];
+
+        connectorsAmountMultiplier = Math.random();
+        
+        var allBlack = Math.random() > 0.9;
+        if (allBlack) {
+          pallete = {
+            background: 'black',
+            stroke: 'black',
+            colors: ['black', 'black', 'black']
+          };
+        }
+
+        fill('white');
+        noStroke();
+        rect(0, 0, width, height);
+        
+        // Only background sometimes.
+        if (Math.random() > 0.5 && !allBlack) {
+          fill(pallete.background);
+          noStroke();
+          rect(0, 0, width, height);
+        }
+        
+        var globalStrokeColor = color(0, 0, 0, 40);
+        if (Math.random() > 0.2) {
+          globalStrokeColor = color(255, 255, 255, 120);
+        }
+        if (Math.random() > 0.95) {
+          globalStrokeColor = color(255, 255, 255, 255);
+        }
+        if (Math.random() > 0.95) {
+          globalStrokeColor = color(0, 0, 0, 255);
+        }
+        if (Math.random() > 0.4) {
+          globalStrokeColor = color(0, 0, 0, 0);
+        }
+        if (allBlack && Math.random() > 0.3) {
+          globalStrokeColor = color(0, 0, 0, 255);
+        }
+        
+        for(var i = 0; i < 5; i++) {
+          if (Math.random() > 0.3) {
+            drawSoot(0, 0, width, height, 0.5);
+          }
+        }
+        
+        var sunRadius = (height / 2) + (Math.random() * height * 5 * Math.random());
+        var sunCenterX = -sunRadius / 3;
+        var sunCenterY = height / 2;
+        var smallSun = Math.random() > 0.1;
+        if (smallSun) {
+          // small sun
+          sunRadius = (height / 20) + (Math.random() * height / 2);
+          sunCenterX = Math.random() * (width / 2);// sunRadius;
+          sunCenterY = height / 2;
+        }
+        
+        var moonCenterX = (width / 3) + (Math.random() * (width / 2));
+        var moonCenterY = height / 2;
+        var moonRadius = (height / 8) + Math.random() * (height / 4);
+        
+        var planetCenterX = width;
+        var planetCenterY = height / 2;
+        var planetRadius = (height / 4) + Math.random() * (height / 2);
+        
+        var rays = 50 + Math.floor(Math.random() * 2000 * Math.random() * Math.random());
+        var rayLength = Math.max(width, height) + sunRadius;
+        
+        // Draw sun rays.
+        // stroke(230, 140, 160);
+        var backgroundRayColor = color(pallete.stroke);
+        backgroundRayColor.setAlpha(150);
+        stroke(backgroundRayColor);
+        var allowStorkeChange = Math.random() > 0.2;
+        var allowBGStorkeChange = Math.random() > 0.3;
+        var flagStroke = false;
+        var bgRays = Math.floor((rays * 2) + (rays * 5 * Math.random()));
+        var bgRaySizeRelation = 0.1 + (Math.random());
+        var bgOffset = Math.floor(Math.random() * bgRays);
+        var bgMultiplier = Math.random() * 5;
+
+        var asteroids = [];
+        var amountOfAsteroids = 1 + Math.floor(Math.random() * 200 * Math.random() * Math.random());
+        for (var i = 0; i < amountOfAsteroids; i++) {
+          
+          var x = (width / 3) + (Math.random() * (width / 2));
+          var y = Math.random() * height;
+          var r = (height / 60) + (Math.random() * Math.random() * (height / 3));
+
+          if (smallSun) {
+            x = Math.random() * width;
+            // When it's on the sun try to choose a new position. If it happends 2x w/e.
+            if (Math.sqrt(((x - sunCenterX) * (x - sunCenterX)) + ((y - sunCenterY) * (y - sunCenterY))) > (r * .5) + (sunRadius * .5)) {
+              x = Math.random() * width;
+              y = Math.random() * height;
+            }
+          }
+          
+          var collidesWithAnotherAsteroid = false;
+          for (var k = 0; k < asteroids.length; k++) {
+            // Collision detect and make sure it's not overlapping.
+            if (Math.abs(x - asteroids[k].x) < (r + asteroids[k].r) * 0.5 || Math.abs(y - asteroids[k].y) < (r + asteroids[k].r) * 0.5) {
+              collidesWithAnotherAsteroid = true;
+              break;
+            }
+          }
+          
+          if (!collidesWithAnotherAsteroid) {
+            asteroids.push({
+              x: x,
+              y: y,
+              r: r
+            });
+          }
+        }
+        
+        var strokeColor = pallete.stroke;
+        stroke(strokeColor);
+        var raysSinOffset = Math.floor(Math.random() * rays);
+        var rayPowerModulation = Math.random() * 2;
+        var rayThiccWeight = (width / 1000) + (Math.random() * (width / 250));
+        var rayThinWeight = width / 1000;
+        strokeWeight(rayThiccWeight);
+        
+        for (var i = 0; i < rays; i ++) {
+          var rayAngle = ((i / rays) * Math.PI * 2);
+          var rayX1 = sunCenterX + (Math.cos(rayAngle) * (sunRadius / 2));
+          var rayY1 = sunCenterY - (Math.sin(rayAngle) * (sunRadius / 2));
+          
+          var fullRayLength = rayLength;
+
+          if (flagStroke && allowStorkeChange) {
+            flagStroke = false;
+            strokeWeight(rayThinWeight);
+          } else {
+            flagStroke = true;
+            strokeWeight(rayThiccWeight);
+          }
+          
+          for (var k = 0; k < asteroids.length; k++) {
+            var angle1 = getAngleBetweenTwoPoints(sunCenterX, sunCenterY, asteroids[k].x, asteroids[k].y - (asteroids[k].r * .5));
+            var angle2 = getAngleBetweenTwoPoints(sunCenterX, sunCenterY, asteroids[k].x, asteroids[k].y + (asteroids[k].r * .5));
+            var angle3 = getAngleBetweenTwoPoints(sunCenterX, sunCenterY, asteroids[k].x + (asteroids[k].r * .5), asteroids[k].y);
+            var angle4 = getAngleBetweenTwoPoints(sunCenterX, sunCenterY, asteroids[k].x - (asteroids[k].r * .5), asteroids[k].y);
+            
+            if (Math.abs(asteroids[k].y - sunCenterY) < asteroids[k].r && asteroids[k].x > sunCenterX) {
+              if (rayAngle === 0) {
+                angle1 = -1;
+                angle2 = 1;
+              } else if (rayAngle < Math.PI) {
+                angle1 = angle1 > Math.PI ? 0 : angle1;
+                angle2 = angle2 > Math.PI ? 0 : angle2;
+                angle3 = angle3 > Math.PI ? 0 : angle3;
+                angle4 = angle4 > Math.PI ? 0 : angle4;
+              } else {
+                angle1 = angle1 < Math.PI ? Math.PI * 2 : angle1;
+                angle2 = angle2 < Math.PI ? Math.PI * 2 : angle2;
+                angle3 = angle3 < Math.PI ? Math.PI * 2 : angle3;
+                angle4 = angle4 < Math.PI ? Math.PI * 2 : angle4;
+              }
+            }
+
+            var minIntersectAngle = Math.min(angle1, angle2, angle3, angle4);
+            var maxIntersectAngle = Math.max(angle1, angle2, angle3, angle4);
+
+            if (rayAngle > minIntersectAngle && rayAngle < maxIntersectAngle) {
+              if (Math.sqrt(((asteroids[k].x - sunCenterX) * (asteroids[k].x - sunCenterX)) + ((asteroids[k].y - sunCenterY) * (asteroids[k].y - sunCenterY))) > (asteroids[k].r * .5) + (sunRadius * .5)) {
+                fullRayLength = Math.min(fullRayLength, Math.sqrt(((asteroids[k].x - rayX1) * (asteroids[k].x - rayX1)) + ((asteroids[k].y - rayY1) * (asteroids[k].y - rayY1))));
+              }
+            }
+          }
+          
+          var rayX2 = sunCenterX + (Math.cos(rayAngle) * fullRayLength) + (Math.cos(rayAngle) * (sunRadius / 2));
+          var rayY2 = sunCenterY - (Math.sin(rayAngle) * fullRayLength) - (Math.sin(rayAngle) * (sunRadius / 2));
+          
+          line(rayX1, rayY1, rayX2, rayY2);
+        }
+        
+        // Draw sun.
+        noStroke();
+        fill(pallete.colors[0]);
+        if (Math.random() > 0.8) {
+          fill(pallete.background);
+        }
+        if (Math.random() > 0.8) {
+          noFill();
+        }
+        if (Math.random() > 0.8) {
+          fill(255, 255, 255);
+        }
+        if (Math.random() > 0.6) {
+          fill(pallete.stroke);
+        }
+        
+        if (Math.random() > 0.8) {
+          fill(0, 0, 0);
+        }
+        ellipse(sunCenterX, sunCenterY, sunRadius, sunRadius);
+        // Draw stroke on sun.
+        var sunStroke = Math.random() * Math.random() * (width / 40);
+        strokeWeight(sunStroke);
+        stroke(globalStrokeColor);
+        noFill();
+        ellipse(sunCenterX, sunCenterY, sunRadius - sunStroke, sunRadius - sunStroke);
+        
+        var sameColorForOther = Math.random() > 0.4;
+        var randomColorsForHood = Math.random() > 0.7;
+        
+        var hoodedMoon = Math.random() > 0.3;
+        var moonStroke = Math.random() * Math.random() * (width / 80);
+
+        for (var i = 0; i < asteroids.length; i++) {
+          var asteroid = asteroids[i];
+          
+          noStroke();
+          if (hoodedMoon) {
+            if (randomColorsForHood) {
+              fill(pallete.colors[Math.floor(Math.random() * pallete.colors.length)]);
+            } else {
+              fill(pallete.background);
+            }
+            ellipse(asteroid.x, asteroid.y, asteroid.r, asteroid.r);
+            noFill();
+        
+            translate(asteroid.x - (asteroid.r), asteroid.y - (asteroid.r));
+            
+            var angleFromSun = getAngleBetweenTwoPoints(sunCenterX, sunCenterY, asteroid.x, asteroid.y);
+
+            angleFromSun = (Math.PI * 2) - angleFromSun;
+            drawHood(asteroid.r * 2, asteroid.r * 2, pallete, rayThinWeight, rayThiccWeight, rays, angleFromSun);
+            translate(-(asteroid.x - (asteroid.r)), -(asteroid.y - (asteroid.r)));
+          } else {
+            if (sameColorForOther) {
+              fill(pallete.colors[0]);
+            } else {
+              fill(pallete.colors[Math.floor(Math.random() * pallete.colors.length)]);
+            }
+            ellipse(asteroid.x, asteroid.y, asteroid.r, asteroid.r);
+            noFill();
+            // Draw stroke on moon.
+            strokeWeight(moonStroke);
+            stroke(globalStrokeColor);
+            noFill();
+            ellipse(asteroid.x, asteroid.y, asteroid.r - moonStroke, asteroid.r - moonStroke);
+          }
+        }
+        
+        drawSoot(0, 0, width, height, 0.3);
+        drawSoot(0, 0, width, height, 0.3);
+        drawSoot(0, 0, width, height, 0.3);
+        
+        noLoop();
+      }
+    </script>
+  </body>
+</html>
