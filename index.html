@@ -533,23 +533,6 @@
           var yFinalPush = (Math.sin(finalDir) * (finalIntensity * 0.2));
           var finalY = cy2 + yFinalPush + (yMove / 3);
           
-          // var finalX = cx1 + (cx1 > width / 2 ? -xFall : xFall);
-          // if (finalX > width / 2 && cx1 < width / 2) {
-          //   finalX = width / 2;
-          // } else if (finalX < width / 2 && cx1 > width / 2) {
-          //   finalX = width / 2;
-          // }
-          // var finalX = x + xFall;
-          // var finalY = y + yMove;
-          // if (x < width / 2) {
-          //   var xPush = ((width / 2) - x) * Math.cos(angleFromSun);
-          //   cx1 = cx1 + (xPush * 0.8);
-            
-          //   // var yPush = -verticalAmplifier * (height / 4) * Math.sin(angleFromSun);
-          //   // finalY = cy1;// + yPush;
-          //   // cy1 = cy1 + (yPush * 0.7);
-          // }
-
           bezier(x, y, cx1, cy1, cx2, cy2, finalX, finalY);
         }
       }
@@ -608,6 +591,10 @@
       }
 
       function mouseClicked() {
+        solace();
+      }
+      
+      function touchStarted() {
         solace();
       }
 
